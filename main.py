@@ -8,7 +8,7 @@ from base64 import b32encode
 
 import pson
 
-ops = { # TODO: implement these in placek.c
+ops = {
     '+': 'placek_add',
     '-': 'placek_sub',
     '*': 'placek_mul',
