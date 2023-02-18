@@ -1,0 +1,9 @@
+[$ fac [fn fac [b] 
+    [? [>= b 1]
+        [* b [fac [- b 1]]]
+        1
+    ]
+]]
+[println
+    [fac 5]
+]
