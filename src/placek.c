@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <gc.h>
+
 #include "placek.h"
 
 void placek_init(void)
@@ -6,19 +8,15 @@ void placek_init(void)
     GC_INIT();
 }
 
+void placek_deinit(void)
+{
+}
+
 PlacekObject* placek_bool(PlacekBool b)
 {
     PlacekObject *o = GC_MALLOC(sizeof(PlacekObject));
     o->type = PLACEK_BOOL;
     o->b = b;
-    return o;
-}
-
-PlacekObject* placek_int(int i)
-{
-    PlacekObject *o = GC_MALLOC(sizeof(PlacekObject));
-    o->type = PLACEK_INT;
-    o->i = i;
     return o;
 }
 
@@ -53,7 +51,7 @@ PlacekObject* placek_array(int argc, PlacekObject *argv[])
 PlacekObject* placek_fn(PlacekFn fn)
 {
     PlacekObject *o = GC_MALLOC(sizeof(PlacekObject));
-    o->type = 3;
+    o->type = PLACEK_FN;
     o->fn = fn;
     return o;
 }
@@ -64,8 +62,6 @@ PlacekBool placek_truthy(PlacekObject *o)
     {
         case PLACEK_BOOL:
             return o->b;
-        case PLACEK_INT:
-            return o->i != 0;
         case PLACEK_FLOAT:
             return o->f != 0;
         case PLACEK_STR:
@@ -86,11 +82,11 @@ PlacekObject* placek_print(int argc, PlacekObject *argv[])
 {
     for (int i = 1; i < argc; i++) {
         switch (argv[i]->type) {
-            case PLACEK_INT:
-                printf("%d", argv[i]->i);
-                break;
             case PLACEK_FLOAT:
-                printf("%f", argv[i]->f);
+                if (argv[i]->f == (long)argv[i]->f)
+                    printf("%d", (long)argv[i]->f);
+                else
+                    printf("%f", argv[i]->f);
                 break;
             case PLACEK_STR:
                 printf("%s", argv[i]->s);
@@ -123,3 +119,7 @@ PlacekObject* placek_println(int argc, PlacekObject *argv[])
     placek_print(argc, argv);
     printf("\n");
 }
+
+PlacekObject placek_false = {.type = PLACEK_BOOL, .b = 0};
+PlacekObject placek_true = {.type = PLACEK_BOOL, .b = 1};
+PlacekObject placek_null = {.type = PLACEK_NULL};

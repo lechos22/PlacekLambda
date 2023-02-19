@@ -1,52 +1,55 @@
+#include <gc.h>
+
 #include "placek.h"
 
 PlacekObject* placek_add(int argc, PlacekObject *argv[])
 {
     PlacekObject *o = GC_MALLOC(sizeof(PlacekObject));
-    o->type = PLACEK_INT;
-    o->i = 0;
+    o->type = PLACEK_FLOAT;
+    o->f = 0;
     for (int i = 0; i < argc; i++)
-        o->i += argv[i]->i;
+        o->f += argv[i]->f;
     return o;
 }
 
 PlacekObject* placek_sub(int argc, PlacekObject *argv[])
 {
     PlacekObject *o = GC_MALLOC(sizeof(PlacekObject));
-    o->type = PLACEK_INT;
-    o->i = argv[0]->i;
+    o->type = PLACEK_FLOAT;
+    o->f = argv[0]->f;
     for (int i = 1; i < argc; i++)
-        o->i -= argv[i]->i;
+        o->f -= argv[i]->f;
     return o;
 }
 
 PlacekObject* placek_mul(int argc, PlacekObject *argv[])
 {
     PlacekObject *o = GC_MALLOC(sizeof(PlacekObject));
-    o->type = PLACEK_INT;
-    o->i = 1;
+    o->type = PLACEK_FLOAT;
+    o->f = 1;
     for (int i = 0; i < argc; i++)
-        o->i *= argv[i]->i;
+        o->f *= argv[i]->f;
     return o;
 }
 
 PlacekObject* placek_div(int argc, PlacekObject *argv[])
 {
     PlacekObject *o = GC_MALLOC(sizeof(PlacekObject));
-    o->type = PLACEK_INT;
-    o->i = argv[0]->i;
+    o->type = PLACEK_FLOAT;
+    o->f = argv[0]->f;
     for (int i = 1; i < argc; i++)
-        o->i /= argv[i]->i;
+        o->f /= argv[i]->f;
     return o;
 }
 
 PlacekObject* placek_mod(int argc, PlacekObject *argv[])
 {
     PlacekObject *o = GC_MALLOC(sizeof(PlacekObject));
-    o->type = PLACEK_INT;
-    o->i = argv[0]->i;
+    o->type = PLACEK_FLOAT;
+    long acc = (long)argv[0]->f;
     for (int i = 1; i < argc; i++)
-        o->i %= argv[i]->i;
+        acc %= (long)argv[i]->f;
+    o->f = acc;
     return o;
 }
 
@@ -56,7 +59,7 @@ PlacekObject* placek_eq(int argc, PlacekObject *argv[])
     o->type = PLACEK_BOOL;
     o->b = 1;
     for (int i = 1; i < argc; i++)
-        o->b &= argv[i - 1]->i == argv[i]->i;
+        o->b &= argv[i - 1]->f == argv[i]->f;
     return o;
 }
 
@@ -66,7 +69,7 @@ PlacekObject* placek_neq(int argc, PlacekObject *argv[])
     o->type = PLACEK_BOOL;
     o->b = 1;
     for (int i = 1; i < argc; i++)
-        o->b &= argv[i - 1]->i != argv[i]->i;
+        o->b &= argv[i - 1]->f != argv[i]->f;
     return o;
 }
 
@@ -76,7 +79,7 @@ PlacekObject* placek_lt(int argc, PlacekObject *argv[])
     o->type = PLACEK_BOOL;
     o->b = 1;
     for (int i = 1; i < argc; i++)
-        o->b &= argv[i - 1]->i < argv[i]->i;
+        o->b &= argv[i - 1]->f < argv[i]->f;
     return o;
 }
 
@@ -86,7 +89,7 @@ PlacekObject* placek_gt(int argc, PlacekObject *argv[])
     o->type = PLACEK_BOOL;
     o->b = 1;
     for (int i = 1; i < argc; i++)
-        o->b &= argv[i - 1]->i > argv[i]->i;
+        o->b &= argv[i - 1]->f > argv[i]->f;
     return o;
 }
 
@@ -96,7 +99,7 @@ PlacekObject* placek_lte(int argc, PlacekObject *argv[])
     o->type = PLACEK_BOOL;
     o->b = 1;
     for (int i = 1; i < argc; i++)
-        o->b &= argv[i - 1]->i <= argv[i]->i;
+        o->b &= argv[i - 1]->f <= argv[i]->f;
     return o;
 }
 
@@ -106,7 +109,7 @@ PlacekObject* placek_gte(int argc, PlacekObject *argv[])
     o->type = PLACEK_BOOL;
     o->b = 1;
     for (int i = 1; i < argc; i++)
-        o->b &= argv[i - 1]->i >= argv[i]->i;
+        o->b &= argv[i - 1]->f >= argv[i]->f;
     return o;
 }
 

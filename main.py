@@ -31,9 +31,7 @@ def codegen(code, scope: dict = {}) -> tuple[str, str]:
         to_prepend is code that must be prepended to the current scope, like function definitions
         to_insert is code that can be inserted into the current scope, like function calls
     '''
-    if type(code) is int: # int
-        return '', 'placek_int(' + str(code) + ')'
-    elif type(code) is float: # float
+    if type(code) is int or type(code) is float: # float
         return '', 'placek_float(' + str(code) + ')'
     elif type(code) is str: # variable or string
         if code[0] == "'":
@@ -106,4 +104,4 @@ if __name__ == '__main__':
         out.write('int main(int argc, char** argv){')
         out.write('placek_init();')
         out.writelines(i[1] + ';' for i in c)
-        out.write('}')
+        out.write('placek_deinit();}')
